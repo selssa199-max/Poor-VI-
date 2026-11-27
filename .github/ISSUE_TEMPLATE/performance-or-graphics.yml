@@ -1,0 +1,36 @@
+name: Performance or graphics report
+description: Report low frame rates, stuttering, memory growth or a rendering problem.
+body:
+  - type: input
+    id: build
+    attributes:
+      label: Vice-Tay build
+      description: Give the commit from `git rev-parse --short HEAD` or the release name. Include `diag` or `release` if known.
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware and graphics driver
+      description: List your CPU, GPU, VRAM, system RAM and graphics driver version where known.
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: Give the console profile, resolution if known, any launcher options you changed, and the scene or action that triggers the problem.
+      placeholder: Series S, windowed, default graphics settings. The slowdown starts after about 15 minutes on the water.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What you observed
+      description: For performance, include in-game FPS or frame time if available. For graphics, describe the affected surface and how its appearance changes as you play.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Diagnostic excerpt
+      description: Paste a few lines from the frame or memory report around the problem. For gradual slowdowns, an early and a late sample help. Remove personal paths and account identifiers.
+      render: text
