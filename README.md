@@ -1,126 +1,43 @@
-﻿# **Set-Location "$env:USERPROFILE\\Desktop\\Low-GT-VI"**
+# Poor VI
 
-# 
+Xbox Series compatibility on Windows, tuned for AMD RDNA2 (RX 6600 XT 8 GB) & 16 GB RAM.
 
-# **$readme = @"**
+Community compatibility fork built on VIctory and [TaynanGT/Vice-Tay](https://github.com) to run Xbox Series titles on mid-range PC hardware (Ryzen 7 5700G + RX 6600 XT 8 GB + 16 GB RAM).
 
-# **# Low GT VI**
+---
 
-# 
+## Status & Benchmarks
 
-# **Fork optimise et stabilise pour configurations modestes (\*\*AMD Radeon RX 6600 XT 8 Go\*\*, \*\*Ryzen 7 5700G\*\*, \*\*16 Go RAM DDR4\*\*).**
+| Stage | Status | Notes |
+| :--- | :---: | :--- |
+| Boot & Startup | ✅ Working | Clean RPF archive loading & D3D12 initialization |
+| Menus & Calibration | ✅ Working | Smooth 30.0 FPS (33.3 ms/frame) |
+| Loading Screen | ✅ Working | Passes world streaming without AMD RDNA2 crash (0x887A0007 fixed) |
+| Intro Cutscenes | ✅ Stable | Runs without GPU device hang (VICTORY_RELAY=0), peaks up to 8–10 FPS |
+| In-Game / Gameplay | 🚧 Playable (WIP) | Enters gameplay with peaks up to ~10 FPS on 16 GB RAM (memory optimization ongoing) |
 
-# 
+---
 
-# **## Etat d'avancement (Status)**
+## Hardware & Key Fixes
 
-# 
+- Test System: AMD Ryzen 7 5700G (8 cores) · Radeon RX 6600 XT 8 GB (RDNA2) · 16 GiB DDR4 + SSD Pagefile · Windows 10/11 x64
+- RDNA2 Depth-Stencil UAV Guard (descriptor/host.rs): Prevents invalid UAV creation on depth-stencil textures (0x887A0007 at world load).
+- Cutscene GPU Stability (VICTORY_RELAY=0): Prevents AMD driver Device Hung during multi-list cutscene submissions.
+- Low-Spec Memory Profile: Textures capped at 512x512 (masks 256x256), 2048 MB local card buffers, 960x540 internal render upscaled to 1080p.
 
-# **| Etape | Statut | Details / Notes |**
+---
 
-# **| :--- | :---: | :--- |**
+## Quick Start
 
-# **| \*\*Boot / Demarrage\*\* | ✅ Fonctionnel | Lancement propre, chargement des archives RPF et initialisation D3D12 |**
+1. Build in release mode:
+   ```powershell
+   cargo build --locked --release --features diagnostics -p victory
+   ```
+2. Edit the executable path inside Lancer_Low_GT_VI.bat and double-click it to launch.
 
-# **| \*\*Menus \& Calibrage\*\* | ✅ Fonctionnel | Interface fluide (30 FPS), reglage luminosite et navigation stables |**
+---
 
-# **| \*\*Ecran de chargement\*\* | ✅ Fonctionnel | Passe completement sans blocage ni crash GPU AMD (`0x887A0007` corrige) |**
+## Credits & License
 
-# **| \*\*Cinematique d'intro\*\* | ✅ Stable | Tourne sans crash (`VICTORY\\\_RELAY=0`), pointes jusqu'a \*\*\~8-10 FPS\*\* |**
-
-# **| \*\*Gameplay / En jeu\*\* | 🚧 Jouable (WIP) | Entre en jeu avec des pointes jusqu'a \*\*10 FPS\*\* sur 16 Go RAM (optimisation memoire en cours) |**
-
-# 
-
-# **# Poor VI**
-
-# 
-
-# **\*\*Xbox Series compatibility on Windows, tuned for AMD RDNA2 (RX 6600 XT 8 GB) \& 16 GB RAM.\*\***
-
-# 
-
-# **Poor VI is a community compatibility project built upon VIctory and \[TaynanGT/Vice-Tay](https://github.com/TaynanGT/Vice-Tay) to run Xbox Series titles on mid-range PC hardware (`Ryzen 7 5700G` + `RX 6600 XT 8 GB` + `16 GB RAM`).** 
-
-# 
-
-# **---**
-
-# 
-
-# **## Statut \& Mesures Clés**
-
-# 
-
-# **\* \*\*Menus \& Calibrage :\*\* 30.0 FPS stables (`33.3 ms/frame`)**
-
-# **\* \*\*Écran de chargement / Cinématiques :\*\* Fonctionnel sans plantage UAV RDNA2 (`VICTORY\_RELAY='0'`) avec des pics de 8 à 10 FPS.**
-
-# **\* \*\*Gameplay :\*\* Jouable (WIP) avec des pics à \~10 FPS sur 16 GB DDR4 (pagefile actif).**
-
-# 
-
-# **### Configuration de Test**
-
-# **\* \*\*CPU :\*\* AMD Ryzen 7 5700G (8 cœurs / 16 threads)**
-
-# **\* \*\*GPU :\*\* AMD Radeon RX 6600 XT (8 GB GDDR6, RDNA2)**
-
-# **\* \*\*RAM :\*\* 16 GiB DDR4 + fichier d'échange SSD**
-
-# **\* \*\*OS :\*\* Windows 10/11 x64**
-
-# 
-
-# **---**
-
-# 
-
-# **## Démarrage Rapide**
-
-# 
-
-# **### 1. Build**
-
-# **```powershell**
-
-# **cargo build --locked --release --features diagnostics -p victory**
-
-# **```**
-
-# 
-
-# **### 2. Lancement (Profil sécurisé RDNA2 / 16 GB RAM)**
-
-# **Utilise le script PowerShell avec le profil optimisé :**
-
-# **```powershell**
-
-# **.\\scripts\\play.ps1 -Exe 'C:\\(\\path\\to\\game.\\)exe' -Console series-s -Build release -More @{**
-
-# &#x20;   **VICTORY\_RELAY = '0'**
-
-# &#x20;   **VICTORY\_TEXTURE\_MAX = '512'**
-
-# &#x20;   **VICTORY\_CARD\_BUFFERS\_MB = '2048'**
-
-# **}**
-
-# **```**
-
-# **\*(Le script complet incluant les variables d'environnement détaillées se trouve dans le bloc PowerShell principal de la réponse source).\***
-
-# 
-
-# **---**
-
-# 
-
-# **## Crédits \& Licence**
-
-# **\* \*\*Bases \& Architecture :\*\* Inspiré et construit à partir de \[TaynanGT/Vice-Tay](https://github.com/TaynanGT/Vice-Tay), \*\*Marvisak/VIctory\*\* et des contributeurs AMD/RDNA2 (`avatarmanz`, `codec-d`, `Belobug`, etc.).**
-
-# **\* \*\*Licence :\*\* GPL-3.0-or-later.**
-
-
-
+- Built upon Marvisak/VIctory, [TaynanGT/Vice-Tay](https://github.com), and upstream RDNA2/AMD community fixes (avatarmanz, codec-d, Belobug).
+- Licensed under GPL-3.0-or-later.
